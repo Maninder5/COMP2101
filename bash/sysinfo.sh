@@ -2,21 +2,25 @@
 
 #First we will make a script for hostname
 hname=$(hostname)
-echo "Hostname: $hname"
 
 #The following script will show domain name
 dname=$(hostname --fqdn)
-echo "Domain name: $dname"
 
 #Now get Operating system name and version
 osnv=$(uname -vo)
-echo "Operating system name and version: $osnv"
 
 #Following script we show us ip address
-ipad=$(ip a s ens33 | awk '/inet /{print$2}')
-echo Ip Adrress: $ipad
+ipad=$(hostname -I)
 
 #Let's get all root filesystem status
-filestatus=$(df -H)
-echo "All root file system:"
-echo "$filestatus"
+filestatus=$(df -H --total --output=avail | tail -1)
+
+cat << EOF
+Report for $hname
+===============
+FQDN: $dname
+Operating System name and version: $osnv
+IP Address: $ipad
+Root Filesystem Free Space: $filestatus
+===============
+EOF
